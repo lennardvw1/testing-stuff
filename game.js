@@ -371,10 +371,32 @@ function createEmptyEditorLevel() {
   return empty;
 }
 
+function ensureGroundBase(level) {
+  if (!level) return level;
+  const groundWidth = Math.max(level.width || 1800, 1800);
+  const ground = level.solids.find((solid) => solid.type === 'ground') || {
+    x: 0,
+    y: 490,
+    w: groundWidth,
+    h: 52,
+    type: 'ground',
+  };
+
+  ground.x = 0;
+  ground.y = 490;
+  ground.h = 52;
+  ground.w = groundWidth;
+  ground.type = 'ground';
+
+  level.solids = [ground, ...level.solids.filter((solid) => solid.type !== 'ground')];
+  return level;
+}
+
 function ensureEditorLevel() {
   if (!state.editorLevel) {
     state.editorLevel = createEmptyEditorLevel();
   }
+  ensureGroundBase(state.editorLevel);
   return state.editorLevel;
 }
 
@@ -413,9 +435,10 @@ function applyEditorToolAtCell(cell) {
 
   if (state.editorTool === 'erase') {
     level.solids = level.solids.filter((solid) => {
+      if (solid.type === 'ground') return true;
       const inX = solid.x <= tileX + tileSize && solid.x + solid.w >= tileX;
       const inY = solid.y <= tileY + tileSize && solid.y + solid.h >= tileY;
-      return !(inX && inY && solid.type !== 'ground');
+      return !(inX && inY);
     });
     level.enemies = level.enemies.filter((enemy) => {
       const inX = enemy.x <= tileX + tileSize && enemy.x + enemy.w >= tileX;
@@ -475,6 +498,7 @@ function applyEditorToolAtCell(cell) {
     newSolid.h = 52;
     level.solids = level.solids.filter((solid) => solid.type !== 'ground');
     level.solids.unshift(newSolid);
+    ensureGroundBase(level);
     return;
   }
 
