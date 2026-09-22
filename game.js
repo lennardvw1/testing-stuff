@@ -20,6 +20,7 @@ const keys = {};
 let cameraX = 0;
 let lastTime = 0;
 let timer = 0;
+let saveLevelButtonResetTimer = null;
 
 const playerSprites = {
   stand: new Image(),
@@ -525,6 +526,13 @@ function saveEditorLevel() {
   saveCustomLevels(saved);
   populateLevelList();
   publishLinkInput.value = 'Saved locally.';
+
+  const defaultText = 'Save Level';
+  saveLevelButton.textContent = 'Level Saved';
+  clearTimeout(saveLevelButtonResetTimer);
+  saveLevelButtonResetTimer = setTimeout(() => {
+    saveLevelButton.textContent = defaultText;
+  }, 1000);
 }
 
 function publishCurrentLevel() {
