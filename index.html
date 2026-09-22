@@ -3,16 +3,86 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mini Mario 1 Remake</title>
+    <title>Mini Mario World</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="frame">
       <div class="hud">
-        <div class="label">Mini Mario 1 Remake</div>
+        <div class="label">Mini Mario World</div>
         <div class="controls">Move: A/D or ←/→ &nbsp;|&nbsp; Jump: W / ↑ / Space</div>
       </div>
       <canvas id="game" width="960" height="540"></canvas>
+
+      <div id="titleScreen" class="screen active">
+        <div class="panel">
+          <div class="logo">SUPER MINI WORLD</div>
+          <p>Play, build, and publish your own Mario-style levels.</p>
+          <button class="primary" data-action="play-first">Play Demo Level</button>
+          <button data-screen="level-select">Level Select</button>
+          <button data-screen="editor">Open Level Editor</button>
+        </div>
+      </div>
+
+      <div id="levelSelectScreen" class="screen hidden">
+        <div class="panel wide-panel">
+          <div class="screen-header">
+            <h2>Choose a level</h2>
+            <button class="small" data-screen="title">Back</button>
+          </div>
+          <div id="levelList" class="level-list"></div>
+        </div>
+      </div>
+
+      <div id="editorScreen" class="screen hidden">
+        <div class="panel editor-panel">
+          <div class="screen-header">
+            <h2>Level Editor</h2>
+            <button class="small" data-screen="title">Back</button>
+          </div>
+
+          <div class="editor-toolbar">
+            <button class="tool-button active" data-tool="ground">Ground</button>
+            <button class="tool-button" data-tool="brick">Brick</button>
+            <button class="tool-button" data-tool="pipe">Pipe</button>
+            <button class="tool-button" data-tool="coin">Coin</button>
+            <button class="tool-button" data-tool="goomba">Goomba</button>
+            <button class="tool-button" data-tool="spawn">Start</button>
+            <button class="tool-button" data-tool="flag">Goal</button>
+            <button class="tool-button" data-tool="erase">Erase</button>
+          </div>
+
+          <div class="editor-field-row">
+            <label for="levelNameInput">Level name</label>
+            <input id="levelNameInput" type="text" maxlength="28" value="My Custom Level" />
+          </div>
+
+          <div class="editor-actions">
+            <button class="primary" id="saveLevelButton">Save Level</button>
+            <button id="testLevelButton">Playtest</button>
+            <button id="publishLevelButton">Publish</button>
+            <button id="clearEditorButton">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="publishScreen" class="screen hidden">
+        <div class="panel publish-panel">
+          <div class="screen-header">
+            <h2>Publish Level</h2>
+            <button class="small" data-screen="editor">Back</button>
+          </div>
+
+          <p class="publish-copy">Share your custom level with a link.</p>
+          <input id="publishLinkInput" type="text" readonly value="" />
+
+          <div class="editor-actions">
+            <button class="primary" id="copyPublishLinkButton">Copy Link</button>
+            <button id="openPublishLinkButton">Open Link</button>
+            <button data-screen="title">Main Menu</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="game.js"></script>
